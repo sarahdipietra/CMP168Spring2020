@@ -1,4 +1,4 @@
-public class InterviewQuestion {
+public class InterviewQuestionRun {
 	public static int sqrt(int k) {
 		long left = (0), right = (k); 
 		
