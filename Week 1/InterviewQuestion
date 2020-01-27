@@ -1,0 +1,19 @@
+public class InterviewQuestion {
+	public int sqrt(int k) {
+		long left = (0); 
+		long right = (k); 
+		
+		while (left <= right) {
+			long mid = left + (right-left)/2;
+			if  (mid * mid <= k) {
+				left = mid + 1;
+			}
+			else {
+				right = mid - 1;
+			}
+		}
+		return (int) left-1;
+	}
+}
+
+/* (O(logk)/optimal solution) is better than (O(logk)/brute force approach)*/
