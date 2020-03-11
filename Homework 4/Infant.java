@@ -1,3 +1,4 @@
+
 public class Infant extends Person {	
 	private class InfantToy{
 		private String infantToyName;
@@ -30,14 +31,18 @@ public class Infant extends Person {
 		toys = new InfantToy [10];
 	}
 	
-	public void addInfantToy(InfantToy blob) {
-		if(numInfantToys < toys.length) {
+	public void addInfantToy(String name, int rating) {
+		InfantToy blob = new InfantToy(name, rating);
+		if (numInfantToys < 10) {
 			toys[numInfantToys] = blob;
-		}
 			numInfantToys++;
+		}
+		else {
+			System.out.print("toys has reached capacity of 10");
+		}
 	}
 	
-	public int getNumToys() {
+	public int getNumInfantToys() {
 		return numInfantToys;
 	}
 	
@@ -51,7 +56,7 @@ public class Infant extends Person {
 	}
 	
 	public int getInfantToyRating(int index) {
-		if(index <= numInfantToys && index >= 0) {
+		if(index < numInfantToys && index >= 0) {
 			return toys[index].infantToyRating;
 		}
 		else {
@@ -59,8 +64,8 @@ public class Infant extends Person {
 		}
 	}
 	
-	public String getInfantToyAsString(int index) {
-		if(index <= numInfantToys && index >= 0) {
+	public java.lang.String getInfantToyAsString(int index) {
+		if(index < numInfantToys && index >= 0) {
 			return toys[index].toString();
 		}
 		else {
@@ -69,13 +74,18 @@ public class Infant extends Person {
 	}
 	
 	public int getHighestInfantToyRating() {
-		int best = -1;
-		for(int i = 0; i < numInfantToys; i++) {
-			if(toys[i].infantToyRating > best) {
-				best = toys[i].infantToyRating;
-			}
+		if (toys.length <= 0) {
+			return 0;
 		}
-		return best;
+		else {
+			int best = 0;
+			for(int i = 0; i < numInfantToys; i++) {
+				if(toys[i].infantToyRating > best) {
+					best = toys[i].infantToyRating;
+				}
+			}
+			return best;
+		}
 	}
 
 	@Override
@@ -89,5 +99,4 @@ public class Infant extends Person {
 		super.printDetails();
 			System.out.printf("Infant: Number of Toys: %4d | Infant Toys:\n | InfantToy: Toy Name: %20s | Rating %4d\n", numInfantToys, toys, infantToyName, infantToyRating);
 	}
-
 }
