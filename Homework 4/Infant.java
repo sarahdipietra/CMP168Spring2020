@@ -64,14 +64,15 @@ public class Infant extends Person {
 		}
 	}
 	
-	public java.lang.String getInfantToyAsString(int index) {
+	/*public String getInfantToyAsString(int index) {
 		if(index < numInfantToys && index >= 0) {
-			return toys[index].toString();
+			String s = super.toString() + toys[index].toString();
+			return s;
 		}
 		else {
 			return "invalid index + " + index;
 		}
-	}
+	}*/
 	
 	public int getHighestInfantToyRating() {
 		if (toys.length <= 0) {
@@ -89,11 +90,23 @@ public class Infant extends Person {
 	}
 
 	@Override
-	public String toString() {
-		super.toString();
-		return super.toString() + String.format("Infant: Number of Toys: %4d | Infant Toys:\n", numInfantToys, toys); 
-	}
-	
+    public String toString() {
+        String s = super.toString() + String.format("Infant: Number of Toys: %4d | Infant Toys:\n", numInfantToys);
+        for (int i = 0; i < numInfantToys; i++) {
+            s = s + toys[i].infantToyName + ", " + toys[i].infantToyRating + "; ";
+        }
+        return s;
+    }
+
+    public String getInfantToyAsString(int index) {
+        if (index >= 0 && index < numInfantToys) {
+             return super.toString() + String.format("Infant: Number of Toys: %4d | \n", numInfantToys) + String.format("InfantToy: Toy Name: %20s | Rating %4d\n", toys[index].infantToyName, toys[index].infantToyRating);
+        }
+        else {
+            return "invalid index " + index;
+       }
+    }
+
 	@Override
 	public void printDetails() {
 		super.printDetails();
