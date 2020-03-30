@@ -1,5 +1,4 @@
 
-
 public class Faculty extends Employee{
 	private Course[] coursesTaught = new Course[50];
 	private int numCoursesTaught;
@@ -12,8 +11,8 @@ public class Faculty extends Employee{
 	}
 	
 	public Faculty(boolean isTenured) {
-		this.coursesTaught = coursesTaught;
-		this.numCoursesTaught = numCoursesTaught;
+		coursesTaught = new Course[50];
+		numCoursesTaught = 0;
 		this.isTenured = isTenured;
 	}
 	
@@ -26,24 +25,28 @@ public class Faculty extends Employee{
 	
 	public Faculty(String name, int birthYear, String deptName, boolean isTenured) {
 		super(name, birthYear, deptName);
-		this.coursesTaught = new Course[50];
-		this.numCoursesTaught = 0;
+		coursesTaught = new Course[50];
+		numCoursesTaught = 0;
 		this.isTenured = isTenured;
 	}
 	
 	public boolean isTenured() {
-		return this.isTenured;
-	}
-	
-	public void setIsTenured(boolean isTenured) {
-		this.isTenured = isTenured;
+		if (isTenured) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
 	public int getNumCoursesTaught() {
 		return numCoursesTaught;
 	}
 	
-	// These next two constructors have errors
+	public void setIsTenured(boolean isTenured) {
+		this.isTenured = isTenured;
+	}
+	
 	public void addCourseTaught(Course course) {
 		if (numCoursesTaught < coursesTaught.length) {
 			coursesTaught[numCoursesTaught] = course;
@@ -60,10 +63,9 @@ public class Faculty extends Employee{
 			}
 		}
 	}
-
 	
 	public Course getCourseTaught(int index) {
-		if (index > 0 && index < numCoursesTaught) {
+		if (index>=0 && index<numCoursesTaught) {
 			return coursesTaught[index];
 		}
 		else {
