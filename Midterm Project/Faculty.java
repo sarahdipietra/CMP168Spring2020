@@ -1,4 +1,5 @@
 
+
 public class Faculty extends Employee{
 	private Course[] coursesTaught = new Course[50];
 	private int numCoursesTaught;
@@ -48,7 +49,7 @@ public class Faculty extends Employee{
 	}
 	
 	public void addCourseTaught(Course course) {
-		if (numCoursesTaught < coursesTaught.length) {
+		if (numCoursesTaught >= 0 && numCoursesTaught < coursesTaught.length) {
 			coursesTaught[numCoursesTaught] = course;
 			numCoursesTaught++;
 		}
