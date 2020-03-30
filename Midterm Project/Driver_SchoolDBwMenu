@@ -1,0 +1,946 @@
+
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import static java.lang.Integer.parseInt;
+
+public class Driver_SchoolDB {
+	public static void main(String[] args) throws IOException {
+
+		Scanner scnr = new Scanner(System.in);
+		FileInputStream fileByteStream = null;
+		Scanner input = null;
+
+		fileByteStream = new FileInputStream("SchoolDB_Initial.txt");
+		input = new Scanner(fileByteStream);
+
+
+		Course[] courses = new Course[50];
+		int numOfCourses = 0;
+		GeneralStaff[] generalStaff = new GeneralStaff[50];
+		int numOfGeneralStaff = 0;
+		Faculty[] faculty = new Faculty[50];
+		int numOfFaculty = 0;
+		Student[] students = new Student[50];
+		int numOfStudents = 0;
+
+
+
+		while (input.hasNextLine()) {
+			String personType = input.next();
+			if (personType.equals("Course:")) {
+				String[] courseString = input.nextLine().split(",");
+				if (courseString[0].equals(" true") || courseString[0].equals(" false")) {
+					Boolean personIsGraduate = false;
+					if (courseString[0].equals(" true")) {
+						personIsGraduate = true;
+					}
+					if (courseString.length > 1) {
+						int personCourseNum = parseInt(courseString[1].replace(" ", ""));
+						String personCourseDept = courseString[2].replace(" ", "");
+						int personNumCredits = parseInt(courseString[3].replace(" ", ""));
+						Course course = new Course(personIsGraduate, personCourseNum, personCourseDept, personNumCredits);
+						courses[numOfCourses] = course;
+						numOfCourses++;
+					}
+					else {
+						Course course = new Course();
+						courses[numOfCourses] = course;
+						numOfCourses++;
+					}
+				}
+			}
+
+			else if (personType.equals("GeneralStaff:")) {
+				String[] GenStaffString = input.nextLine().split(",");
+				if (GenStaffString.length == 0) {
+					GeneralStaff staffMember1 = new GeneralStaff();
+					generalStaff[numOfGeneralStaff] = staffMember1;
+					numOfGeneralStaff++;
+				}
+				else if (GenStaffString.length == 1) {
+					GenStaffString[0] = GenStaffString[0].trim();
+					GeneralStaff staffMember1 = new GeneralStaff(GenStaffString[0]);
+					generalStaff[numOfGeneralStaff] = staffMember1;
+					numOfGeneralStaff++;
+				}
+				else if (GenStaffString.length == 2) {
+					GeneralStaff staffMember1 = new GeneralStaff(GenStaffString[0], GenStaffString[1]);
+					generalStaff[numOfGeneralStaff] = staffMember1;
+					numOfGeneralStaff++;
+				}
+				else if (GenStaffString.length == 4) {
+					GeneralStaff staffMember1 = new GeneralStaff(GenStaffString[0], Integer.parseInt(GenStaffString[1].replace(" ", "")), GenStaffString[2], GenStaffString[3]);
+					generalStaff[numOfGeneralStaff] = staffMember1;
+					numOfGeneralStaff++;
+				}
+			}
+
+
+			else if (personType.equals("Faculty:")) {
+				String[] teacherString = input.nextLine().split(",");
+				if (teacherString[0].equals(" true") || teacherString[0].equals(" false")) {
+					if (teacherString[0].equals(" true")) {
+						Faculty teacher = new Faculty(true);
+						faculty[numOfFaculty] = teacher;
+						numOfFaculty++;
+					}
+				}
+
+				else if (teacherString.length > 1) {
+					if (teacherString[1].replace(" ", "").equals("true") || teacherString[1].replace(" ", "").equals("false")) {
+						String personDeptName = teacherString[0];
+						Boolean personIsTenured = false;
+						if (teacherString[1].equals(" true")) {
+							personIsTenured = true;
+						}
+
+						Faculty teacher = new Faculty(personDeptName, personIsTenured);
+						faculty[numOfFaculty] = teacher;
+						numOfFaculty++;
+					}
+					else {
+						String personName = teacherString[0] ;
+						teacherString[1] = teacherString[1].replace(" ", "");
+						int personBirthYear = Integer.parseInt(teacherString[1]);
+						String personDeptName = teacherString[2].replace(" ", "");
+						Boolean personIsTenured = false;
+
+						if (teacherString[3].replace(" ", "").equals("true")) {
+							personIsTenured = true;
+						}
+
+						Faculty teacher = new Faculty(personName, personBirthYear, personDeptName, personIsTenured);
+						faculty[numOfFaculty] = teacher;
+						numOfFaculty++;
+					}
+				}
+
+				else {
+					Faculty teacher = new Faculty();
+					faculty[numOfFaculty] = teacher;
+					numOfFaculty++;
+				}
+			}
+
+
+			else if (personType.equals("Student:")) {
+				String[] studentString = input.nextLine().split(",");
+				if (studentString[0].equals("true")) {
+					Student student = new Student(true);
+					students[numOfStudents] = student;
+					numOfStudents++;
+				}
+				if (studentString[0].equals("false")) {
+					Student student = new Student(false);
+					students[numOfStudents] = student;
+					numOfStudents++;
+				}
+
+				if (studentString.length > 1) {
+					if (studentString[1].replace(" ", "").equals("true")) {
+						String personMajor = studentString[0];
+						Student student = new Student(personMajor, true);
+						students[numOfStudents] = student;
+						numOfStudents++;
+					}
+					if (studentString[1].replace(" ", "").equals("false")) {
+						String personMajor = studentString[0];
+						Student student = new Student(personMajor, false);
+						students[numOfStudents] = student;
+						numOfStudents++;
+					}
+					else {
+						String personName = studentString[0];
+						int personBirthYear = Integer.parseInt(studentString[1].replace(" ", ""));
+						String personMajor = studentString[2].replace(" ", "");
+						Boolean personIsGraduate = false;
+
+						if (studentString[3].replace(" ", "").equals("true")) {
+							personIsGraduate = true;
+						}
+						Student student = new Student(personName, personBirthYear, personMajor, personIsGraduate);
+						students[numOfStudents] = student;
+						numOfStudents++;
+					}
+				}
+
+				else {
+					Student student = new Student();
+					students[numOfStudents] = student;
+					numOfStudents++;
+				}
+			}
+		}	
+
+		System.out.println("\n**************************************************************\nSCHOOL DATABASE INFO:\n\n************************************************\nCOURSES:");
+
+		if (numOfCourses > 0) {
+			for (int a = 0; a < numOfCourses; a++) {
+				System.out.println(courses[a].toString());
+			}
+			System.out.println("************************************************\n************************************************\nPERSONS:\n************************************************\n************************************************\nEMPLOYEES:\n************************************************\n************************************************\nGENERAL STAFF:");
+		}
+		if (numOfGeneralStaff > 0) {
+			for (int b = 0; b < numOfGeneralStaff; b++) {
+				System.out.println(generalStaff[b].toString());
+			}
+			System.out.println("************************************************\n************************************************\nteacher:");
+		}
+		if (numOfFaculty > 0) {
+			for (int c = 0; c < numOfFaculty; c++) {
+				System.out.println(faculty[c].toString());
+			}
+			System.out.println("************************************************\n************************************************\nSTUDENTS:");
+		}
+		if (numOfStudents > 0) {
+			for (int d = 0; d < numOfStudents; d++) {
+				System.out.println(students[d].toString());
+			}
+			System.out.println("************************************************\n**************************************************************\n");
+		}
+		fileByteStream.close();
+
+		 System.out.println("Would you like to perform an operation? If yes, type y. If no, type n");
+	        char cont = scnr.next().charAt(0);
+	        while (cont =='y') {
+	            System.out.println("Which operation would you like to perform? Type the letter from the list below.");
+	            System.out.println(String.format("a.  Create 3 new Course objects based on input\nb.  Create 3 new Faculty objects based on input\nc.  Create 3 new GeneralStaff objects based on input\nd.  Create 3 new Student objects based on input\ne.  Add 2 new Courses to a Faculty object\nf.  Add 2 new Courses to a Student object\ng.  Add an array of 2 Courses to a Faculty object\nh.  Add an array of 2 Courses to a Student object\ni.  Get the Course at index from a Faculty object\nj. Get the Course at index from a Student object\nk. Select a Faculty object and a Course object from menus and query the Faculty object for the Course to determine whether the Faculty object teaches it or not\nl.  Determine which Faculty object teaches the most and the least courses\nm.  Determine which Course is the minimum and which is the maximum of all Course objects in the catalog\nn.  Determine which Student has the most and least credits"));
+	            char userChoice = scnr.next().charAt(0);
+	            if (userChoice == 'a') {
+	                if (courses.length - numOfCourses < 3) {
+	                    Course[] newCourses = new Course[courses.length * 2];
+	                    for (int i = 0; i < courses.length; i++) {
+	                        newCourses[i] = courses[i];
+	                    }
+	                    courses = newCourses;
+	                }
+
+	                boolean isGraduateCourse = false;
+	                int courseNum = 0;
+	                String courseDept = "";
+	                int numCredits = 0;
+
+	                for (int i = 0; i < 3; i++) {
+	                    if (i == 0) {
+	                        System.out.println("First course:");
+	                    }
+	                    if (i == 1) {
+	                        System.out.println("Second course:");
+	                    }
+	                    if (i == 2) {
+	                        System.out.println("Third course:");
+	                    }
+	                    System.out.println("Would you like to enter information about the course? Type 'y' for yes and 'n' for no.");
+	                    if (scnr.next().charAt(0) == 'y') {
+	                        System.out.println("Is this course a graduate course? Type 'y' for yes and 'n' for no.");
+	                        if (scnr.next().charAt(0) == 'y') {
+	                            isGraduateCourse = true;
+	                        }
+	                        System.out.println("What is the course's number?");
+	                        courseNum = scnr.nextInt();
+	                        System.out.println("What is the course's department?");
+	                        courseDept = scnr.next();
+	                        System.out.println("How many credits is this course worth?");
+	                        numCredits = scnr.nextInt();
+	                        Course course = new Course(isGraduateCourse, courseNum, courseDept, numCredits);
+	                        courses[numOfCourses + i] = course;
+	                    }
+	                    else {
+	                        Course course = new Course();
+	                        courses[numOfCourses + i] = course;
+	                    }
+	                }
+	                numOfCourses += 3;
+	                for (int i = 0; i < numOfCourses; i++) {
+	                    System.out.println(courses[i].toString());
+	                }
+	            }
+	            if (userChoice == 'b') {
+	                if (faculty.length - numOfFaculty < 3) {
+	                    Faculty[] newFaculties = new Faculty[faculty.length * 2];
+	                    for (int i = 0; i < faculty.length; i++) {
+	                        newFaculties[i] = faculty[i];
+	                    }
+	                    faculty = newFaculties;
+	                }
+	                boolean isTenured = true;
+	                String deptName = "";
+	                String name = "";
+	                int birthYear = 0;
+	                for (int i = 0; i < 3; i++) {
+	                    int numParameters = 0;
+	                    if (i == 0) {
+	                        System.out.println("First faculty: ");
+	                    }
+	                    if (i == 1) {
+	                        System.out.println("Second faculty: ");
+	                    }
+	                    if (i == 2) {
+	                        System.out.println("Third faculty: ");
+	                    }
+	                    System.out.println("Would you like to enter information about the faculty's tenure? If yes, type 'y'. Else, type 'n'.");
+	                    if (scnr.next().charAt(0) == 'y') {
+	                        System.out.println("Is the faculty tenured? Type 'y' for yes and 'n' for no");
+	                        if (scnr.next().charAt(0) == 'n') {
+	                            isTenured = false;
+	                        }
+	                        numParameters++;
+	                    }
+	                    if (numParameters > 0) {
+	                        System.out.println("Would you like to enter information about the faculty's department? If yes, type 'y'. Else, type 'n'.");
+	                        if (scnr.next().charAt(0) == 'y') {
+	                            System.out.println("Enter the name of the faculty's department:");
+	                            deptName = scnr.next();
+	                            numParameters++;
+	                        }
+	                        if (numParameters > 1) {
+	                            System.out.println("Would you like to enter information about the faculty's name and birth year? If yes, type 'y'. Else, type 'n'.");
+	                            if (scnr.next().charAt(0) == 'y') {
+	                                System.out.println("Enter the faculty's name:");
+	                                name = scnr.next();
+	                                System.out.println("Enter the faculty's birth year:");
+	                                birthYear = scnr.nextInt();
+	                                numParameters++;
+	                            }
+	                        }
+	                    }
+	                    if (numParameters == 0) {
+	                        Faculty teacher = new Faculty();
+	                        faculty[numOfFaculty + i] = teacher;
+	                    }
+	                    if (numParameters == 1) {
+	                        Faculty teacher = new Faculty(isTenured);
+	                        faculty[numOfFaculty + i] = teacher;
+	                    }
+	                    if (numParameters == 2) {
+	                        Faculty teacher = new Faculty(deptName, isTenured);
+	                        faculty[numOfFaculty + i] = teacher;
+	                    }
+	                    if (numParameters == 3) {
+	                        Faculty teacher = new Faculty(name, birthYear, deptName, isTenured);
+	                        faculty[numOfFaculty + i] = teacher;
+	                    }
+	                }
+	                numOfFaculty += 3;
+	                for (int i = 0; i < numOfFaculty; i++) {
+	                    System.out.println(faculty[i]);
+	                }
+	            }
+	            if (userChoice == 'c') {
+	                if (generalStaff.length - numOfGeneralStaff < 3) {
+	                    GeneralStaff[] newGeneralStaffs = new GeneralStaff[generalStaff.length * 2];
+	                    for (int i = 0; i < generalStaff.length; i++) {
+	                        newGeneralStaffs[i] = generalStaff[i];
+	                    }
+	                    generalStaff = newGeneralStaffs;
+	                }
+
+	                String duty = "";
+	                String deptName = "";
+	                String name = "";
+	                int birthYear = 0;
+	                int numParameters = 0;
+
+	                for (int i = 0; i < 3; i++) {
+	                    if (i == 0) {
+	                        System.out.println("First General Staff:");
+	                    }
+	                    if (i == 1) {
+	                        System.out.println("Second General Staff:");
+	                    }
+	                    if (i == 2) {
+	                        System.out.println("Third General Staff:");
+	                    }
+	                    System.out.println("Would you like to enter information about the general staff's duty? Type 'y' for yes and 'n' for no.");
+	                    if (scnr.next().charAt(0) == 'y') {
+	                        String s = scnr.nextLine();
+	                        System.out.println("What is the general staff's duty?");
+	                        duty = scnr.nextLine();
+	                        numParameters++;
+	                        System.out.println("Would you like to enter information about the general staff's department? Type 'y' for yes and 'n' for no");
+	                        if (scnr.next().charAt(0) == 'y') {
+	                            System.out.println("What is the general staff's department?");
+	                            deptName = scnr.next();
+	                            numParameters++;
+	                            System.out.println("Would you like to enter information about the general staff's name and birth year? Type 'y' for yes and 'n' for no");
+	                            if (scnr.next().charAt(0) == 'y') {
+	                                System.out.println("What is the general staff's name?");
+	                                name = scnr.next();
+	                                System.out.println("What is the general staff's birth year?");
+	                                birthYear = scnr.nextInt();
+	                                numParameters++;
+	                            }
+	                        }
+	                    }
+	                    if (numParameters == 0) {
+	                        GeneralStaff staff1 = new GeneralStaff();
+	                        generalStaff[numOfGeneralStaff + i] = staff1;
+	                    }
+	                    if (numParameters == 1) {
+	                        GeneralStaff staff1 = new GeneralStaff(duty);
+	                        generalStaff[numOfGeneralStaff + i] = staff1;
+	                    }
+	                    if (numParameters == 2) {
+	                        GeneralStaff staff1 = new GeneralStaff(deptName, duty);
+	                        generalStaff[numOfGeneralStaff + i] = staff1;
+	                    }
+	                    else {
+	                        GeneralStaff staff1 = new GeneralStaff(name, birthYear, deptName, duty);
+	                        generalStaff[numOfGeneralStaff + i] = staff1;
+	                    }
+	                }
+	                numOfGeneralStaff += 3;
+	                for (int i = 0; i < numOfGeneralStaff; i++) {
+	                    System.out.println(generalStaff[i]);
+	                }
+
+	            }
+	            if (userChoice == 'd') {
+	                if (students.length - numOfStudents < 3) {
+	                    Student[] newStudents = new Student[students.length * 2];
+	                    for (int i = 0; i < students.length; i++) {
+	                        newStudents[i] = students[i];
+	                    }
+	                    students = newStudents;
+	                }
+
+	                int numParameters = 0;
+	                boolean isGraduate = true;
+	                String major = "";
+	                String name = "";
+	                int birthYear = 0;
+
+	                for (int i = 0; i < 3; i++) {
+	                    if (i == 0) {
+	                        System.out.println("First student:");
+	                    }
+	                    if (i == 1) {
+	                        System.out.println("Second student:");
+	                    }
+	                    if (i == 2) {
+	                        System.out.println("Third student:");
+	                    }
+	                    System.out.println("Would you like to enter information about the type of student? Type 'y' for yes and 'n' for no.") ;
+	                    if (scnr.next().charAt(0) == 'y') {
+	                        numParameters++;
+	                        System.out.println("Is the student a graduate student or undergraduate? Type 'y' for graduate and 'n' for undergraduate.");
+	                        if (scnr.next().charAt(0) == 'n') {
+	                            isGraduate = false;
+	                        }
+	                        System.out.println("Would you like to enter information about the student's major? Type 'y' for yes and 'n' for no.");
+	                        if (scnr.next().charAt(0) == 'y') {
+	                            numParameters++;
+	                            System.out.println("What is the student's major?");
+	                            major = scnr.next();
+	                            System.out.println("Would you like to enter information about the student's name and birth year? Type 'y' for yes and 'n' for no.");
+	                            if (scnr.next().charAt(0) =='y') {
+	                                numParameters++;
+	                                System.out.println("What is the student's name?");
+	                                name = scnr.next();
+	                                System.out.println("What is the student's birth year?");
+	                                birthYear = scnr.nextInt();
+	                            }
+	                        }
+	                    }
+	                    if (numParameters == 0) {
+	                        Student student = new Student();
+	                        students[numOfStudents + i] = student;
+	                    }
+	                    if (numParameters == 1) {
+	                        Student student = new Student(isGraduate);
+	                        students[numOfStudents + i] = student;
+	                    }
+	                    if (numParameters == 2) {
+	                        Student student = new Student(major, isGraduate);
+	                        students[numOfStudents + i] = student;
+	                    }
+	                    else {
+	                        Student student = new Student(name, birthYear, major, isGraduate);
+	                        students[numOfStudents + i] = student;
+	                    }
+	                }
+	                numOfStudents += 3;
+	                for (int i = 0; i < numOfStudents; i++) {
+	                    System.out.println(students[i]);
+	                }
+	            }
+	            if (userChoice == 'e') {
+	                Course[] newCourses = new Course[2];
+	                boolean isGraduateCourse = false;
+	                int courseNum = 0;
+	                String courseDept = "";
+	                int numCredits = 0;
+
+	                for (int i = 0; i < 2; i++) {
+	                    if (i == 0) {
+	                        System.out.println("First course:");
+	                    }
+	                    if (i == 1) {
+	                        System.out.println("Second course:");
+	                    }
+	                    if (i == 2) {
+	                        System.out.println("Third course:");
+	                    }
+	                    System.out.println("Would you like to enter information about the course? Type 'y' for yes and 'n' for no.");
+	                    if (scnr.next().charAt(0) == 'y') {
+	                        System.out.println("Is this course a graduate course? Type 'y' for yes and 'n' for no.");
+	                        if (scnr.next().charAt(0) == 'y') {
+	                            isGraduateCourse = true;
+	                        }
+	                        System.out.println("What is the course's number?");
+	                        courseNum = scnr.nextInt();
+	                        System.out.println("What is the course's department?");
+	                        courseDept = scnr.next();
+	                        System.out.println("How many credits is this course worth?");
+	                        numCredits = scnr.nextInt();
+	                        Course course = new Course(isGraduateCourse, courseNum, courseDept, numCredits);
+	                        newCourses[i] = course;
+	                        courses[numOfCourses + i] = course;
+	                    }
+	                    else {
+	                        Course course = new Course();
+	                        newCourses[i] = course;
+	                        courses[numOfCourses + i] = course;
+	                    }
+	                }
+	                numOfCourses += 2;
+	                char fail = 'y';
+	                System.out.println("Enter the ID of the faculty teaching these courses:");
+	                int facultyID = scnr.nextInt();
+	                Faculty teacher = new Faculty();
+	                while (fail == 'y') {
+	                    for (int i = 0; i < numOfFaculty; i++) {
+	                        if (faculty[i].getEmployeeID() == facultyID) {
+	                        	teacher = faculty[i];
+	                            fail = 'n';
+	                        }
+	                    }
+	                    if (fail =='y') {
+	                        System.out.println("Invalid ID. Enter the ID of the faculty teaching these courses:");
+	                        facultyID = scnr.nextInt();
+	                    }
+	                }
+	                teacher.addCoursesTaught(newCourses);
+	                for (int i = 0; i < numOfFaculty; i++) {
+	                    System.out.println(faculty[i].toString());
+	                }
+	            }
+	            if (userChoice == 'f') {
+	                Course[] newCourses = new Course[2];
+	                boolean isGraduateCourse = false;
+	                int courseNum = 0;
+	                String courseDept = "";
+	                int numCredits = 0;
+
+	                for (int i = 0; i < 2; i++) {
+	                    if (i == 0) {
+	                        System.out.println("First course:");
+	                    }
+	                    if (i == 1) {
+	                        System.out.println("Second course:");
+	                    }
+	                    if (i == 2) {
+	                        System.out.println("Third course:");
+	                    }
+	                    System.out.println("Would you like to enter information about the course? Type 'y' for yes and 'n' for no.");
+	                    if (scnr.next().charAt(0) == 'y') {
+	                        System.out.println("Is this course a graduate course? Type 'y' for yes and 'n' for no.");
+	                        if (scnr.next().charAt(0) == 'y') {
+	                            isGraduateCourse = true;
+	                        }
+	                        System.out.println("What is the course's number?");
+	                        courseNum = scnr.nextInt();
+	                        System.out.println("What is the course's department?");
+	                        courseDept = scnr.next();
+	                        System.out.println("How many credits is this course worth?");
+	                        numCredits = scnr.nextInt();
+	                        Course course = new Course(isGraduateCourse, courseNum, courseDept, numCredits);
+	                        newCourses[i] = course;
+	                    }
+	                    else {
+	                        Course course = new Course();
+	                        newCourses[i] = course;
+	                    }
+	                }
+	                numOfCourses += 2;
+	                char fail = 'y';
+	                System.out.println("Enter the ID of the student taking these courses:");
+	                int studentID = scnr.nextInt();
+	                while (fail == 'y') {
+	                    for (int i = 0; i < numOfStudents; i++) {
+	                        if (students[i].getStudentID() == studentID) {
+	                            students[i].addCoursesTaken(newCourses);
+	                            fail = 'n';
+	                        }
+	                    }
+	                    if (fail =='y') {
+	                        System.out.println("Invalid ID. Enter the ID of the student taking these courses:");
+	                        studentID = scnr.nextInt();
+	                    }
+	                }
+	                for (int i = 0; i < numOfStudents; i++) {
+	                    System.out.println(students[i].toString());
+	                }
+	            }
+	            if (userChoice == 'g') {
+	                Course[] newCourses = new Course[2];
+	                boolean isGraduateCourse = false;
+	                int courseNum = 0;
+	                String courseDept = "";
+	                int numCredits = 0;
+
+	                for (int i = 0; i < 2; i++) {
+	                    if (i == 0) {
+	                        System.out.println("First course:");
+	                    }
+	                    if (i == 1) {
+	                        System.out.println("Second course:");
+	                    }
+	                    if (i == 2) {
+	                        System.out.println("Third course:");
+	                    }
+	                    System.out.println("Would you like to enter information about the course? Type 'y' for yes and 'n' for no.");
+	                    if (scnr.next().charAt(0) == 'y') {
+	                        System.out.println("Is this course a graduate course? Type 'y' for yes and 'n' for no.");
+	                        if (scnr.next().charAt(0) == 'y') {
+	                            isGraduateCourse = true;
+	                        }
+	                        System.out.println("What is the course's number?");
+	                        courseNum = scnr.nextInt();
+	                        System.out.println("What is the course's department?");
+	                        courseDept = scnr.next();
+	                        System.out.println("How many credits is this course worth?");
+	                        numCredits = scnr.nextInt();
+	                        Course course = new Course(isGraduateCourse, courseNum, courseDept, numCredits);
+	                        newCourses[i] = course;
+	                        courses[numOfCourses + i] = course;
+	                    }
+	                    else {
+	                        Course course = new Course();
+	                        newCourses[i] = course;
+	                        courses[numOfCourses + i] = course;
+	                    }
+	                }
+	                numOfCourses += 2;
+	                char fail = 'y';
+	                System.out.println("Enter the ID of the faculty teaching these courses:");
+	                int facultyID = scnr.nextInt();
+	                Faculty teacher = new Faculty();
+	                while (fail == 'y') {
+	                    for (int i = 0; i < numOfFaculty; i++) {
+	                        if (faculty[i].getEmployeeID() == facultyID) {
+	                        	teacher = faculty[i];
+	                            fail = 'n';
+	                        }
+	                    }
+	                    if (fail =='y') {
+	                        System.out.println("Invalid ID. Enter the ID of the faculty teaching these courses:");
+	                        facultyID = scnr.nextInt();
+	                    }
+	                }
+	                teacher.addCoursesTaught(newCourses);
+	                for (int i = 0; i < numOfFaculty; i++) {
+	                    System.out.println(faculty[i].toString());
+	                }
+	            }
+	            if (userChoice == 'h') {
+	                Course[] newCourses = new Course[2];
+	                boolean isGraduateCourse = false;
+	                int courseNum = 0;
+	                String courseDept = "";
+	                int numCredits = 0;
+
+	                for (int i = 0; i < 2; i++) {
+	                    if (i == 0) {
+	                        System.out.println("First course:");
+	                    }
+	                    if (i == 1) {
+	                        System.out.println("Second course:");
+	                    }
+	                    if (i == 2) {
+	                        System.out.println("Third course:");
+	                    }
+	                    System.out.println("Would you like to enter information about the course? Type 'y' for yes and 'n' for no.");
+	                    if (scnr.next().charAt(0) == 'y') {
+	                        System.out.println("Is this course a graduate course? Type 'y' for yes and 'n' for no.");
+	                        if (scnr.next().charAt(0) == 'y') {
+	                            isGraduateCourse = true;
+	                        }
+	                        System.out.println("What is the course's number?");
+	                        courseNum = scnr.nextInt();
+	                        System.out.println("What is the course's department?");
+	                        courseDept = scnr.next();
+	                        System.out.println("How many credits is this course worth?");
+	                        numCredits = scnr.nextInt();
+	                        Course course = new Course(isGraduateCourse, courseNum, courseDept, numCredits);
+	                        newCourses[i] = course;
+	                    }
+	                    else {
+	                        Course course = new Course();
+	                        newCourses[i] = course;
+	                    }
+	                }
+	                numOfCourses += 2;
+	                char fail = 'y';
+	                System.out.println("Enter the ID of the student taking these courses:");
+	                int studentID = scnr.nextInt();
+	                while (fail == 'y') {
+	                    for (int i = 0; i < numOfStudents; i++) {
+	                        if (students[i].getStudentID() == studentID) {
+	                            students[i].addCoursesTaken(newCourses);
+	                            fail = 'n';
+	                        }
+	                    }
+	                    if (fail =='y') {
+	                        System.out.println("Invalid ID. Enter the ID of the student taking these courses:");
+	                        studentID = scnr.nextInt();
+	                    }
+	                }
+	                for (int i = 0; i < numOfStudents; i++) {
+	                    System.out.println(students[i].toString());
+	                }
+	            }
+	            if (userChoice == 'i') {
+	                System.out.println("Enter the ID of the faculty you would like to select:");
+	                int facultyID = scnr.nextInt();
+	                Faculty teacher = new Faculty();
+	                int worked = 0;
+	                while (worked == 0) {
+	                    for (int i = 0; i < numOfFaculty; i++) {
+	                        if (faculty[i].getEmployeeID() == facultyID) {
+	                        	teacher = faculty[i];
+	                            worked = 1;
+	                            System.out.println(teacher.toString());
+	                        }
+	                    }
+	                    if (worked == 0) {
+	                        System.out.println("Invalid ID. Enter the ID of the faculty you would like to select:");
+	                        facultyID = scnr.nextInt();
+	                    }
+	                }
+	                System.out.println(faculty.toString());
+	                System.out.println("Enter the index of the course you would like to select:");
+	                int index = scnr.nextInt();
+	                while (worked == 1) {
+	                    if (index >= 0 && index < numOfCourses) {
+	                        if (teacher.getCourseTaught(index) == null) {
+	                            System.out.println("There is no course at that index. Enter the index of the course you would like to select:");
+	                            index = scnr.nextInt();
+	                        }
+	                        else {
+	                            System.out.println(teacher.getCourseTaught(index).toString());
+	                            worked = 2;
+	                        }
+	                    }
+	                    else {
+	                        System.out.println("Invalid index. Enter the index of the course you would like to select:");
+	                        index = scnr.nextInt();
+	                    }
+	                }
+	            }
+	            if (userChoice == 'j') {
+	                System.out.println("Enter the ID of the student you would like to select:");
+	                int studentID = scnr.nextInt();
+	                Student student = new Student();
+	                int worked = 0;
+	                while (worked == 0) {
+	                    for (int i = 0; i < numOfStudents; i++) {
+	                        if (students[i].getStudentID() == studentID) {
+	                            student = students[i];
+	                            worked = 1;
+	                            System.out.println(student.toString());
+	                        }
+	                    }
+	                    if (worked == 0) {
+	                        System.out.println("Invalid ID. Enter the ID of the student you would like to select:");
+	                        studentID = scnr.nextInt();
+	                    }
+	                }
+	                System.out.println(student.toString());
+	                System.out.println("Enter the index of the course you would like to select:");
+	                int index = scnr.nextInt();
+	                while (worked == 1) {
+	                    if (index >= 0 && index < numOfCourses) {
+	                        if (student.getCourseTaken(index) == null) {
+	                            System.out.println("There is no course at that index. Enter the index of the course you would like to select:");
+	                            index = scnr.nextInt();
+	                        }
+	                        else {
+	                            System.out.println(student.getCourseTaken(index).toString());
+	                            worked = 2;
+	                        }
+	                    }
+	                    else {
+	                        System.out.println("Invalid index. Enter the index of the course you would like to select:");
+	                        index = scnr.nextInt();
+	                    }
+	                }
+	            }
+	            if (userChoice == 'k') {
+	                System.out.println("FACULTIES:");
+	                for (int i = 0; i < numOfFaculty; i++) {
+	                    System.out.println(faculty[i].toString());
+	                }
+	                System.out.println("\nCOURSES:");
+	                for (int i = 0; i < numOfCourses; i++) {
+	                    System.out.println(courses[i].toString());
+	                }
+	                System.out.println("\nEnter the ID of the faculty you would like to select:");
+	                int facultyID = scnr.nextInt();
+	                Boolean failure = true;
+	                Faculty teacher = new Faculty();
+	                while (failure) {
+	                    if (facultyID < 0 || facultyID > numOfFaculty) {
+	                        System.out.println("Invalid ID. Enter the ID of the faculty you would like to select:");
+	                        facultyID = scnr.nextInt();
+	                    } else {
+	                        failure = false;
+	                        for (int i = 0; i < numOfFaculty; i++) {
+	                            if (faculty[i].getEmployeeID() == facultyID) {
+	                            	teacher = faculty[i];
+	                            }
+	                        }
+	                    }
+	                }
+	                System.out.println("\nEnter the number of the course you would like to select:");
+	                int courseID = scnr.nextInt();
+	                Course course = new Course();
+	                while (!failure) {
+	                    for (int i = 0; i < numOfCourses; i++) {
+	                        if (courses[i].getCourseNum() == courseID) {
+	                            course = courses[i];
+	                            failure = true;
+	                        }
+	                    }
+	                    if (!failure) {
+	                        System.out.println("Invalid course number. Enter the number of the course you would like to select:");
+	                        courseID = scnr.nextInt();
+	                    }
+	                }
+	                int taught = 0;
+	                for (int i = 0; i < numOfCourses; i++) {
+	                    if (teacher.getCourseTaught(i) == course) {
+	                        System.out.println("This course is taught by this faculty.");
+	                        taught = 1;
+	                    }
+	                }
+	                if (taught == 0) {
+	                    System.out.println("This course is not taught by this faculty.");
+	                }
+	            }
+	            if (userChoice == 'l') {
+	                int maxnumOfCoursesTaught = 0;
+	                Faculty teacher = new Faculty();
+	                for (int i = 0; i < numOfFaculty; i++) {
+	                    if (faculty[i].getNumCoursesTaught() > 0) {
+	                        maxnumOfCoursesTaught = faculty[i].getNumCoursesTaught();
+	                        teacher = faculty[i];
+	                    }
+	                }
+	                System.out.println("Faculty with the most courses taught: \n" + faculty.toString());
+	            }
+	            if (userChoice == 'm') {
+	                int maxNumCredits = 0;
+	                Course course = new Course();
+	                for (int i = 0; i < numOfCourses; i++) {
+	                    if (courses[i].getNumCredits() > 0) {
+	                        maxNumCredits = courses[i].getNumCredits();
+	                        course = courses[i];
+	                    }
+	                }
+	                System.out.println("Course with the most credits: \n" + course.toString());
+	            }
+	            if (userChoice == 'n') {
+	                int maxnumOfCoursesTaken = 0;
+	                Student student = new Student();
+	                for (int i = 0; i < numOfStudents; i++) {
+	                    if (students[i].getNumCoursesTaken() > 0) {
+	                        maxnumOfCoursesTaken = students[i].getNumCoursesTaken();
+	                        student = students[i];
+	                    }
+	                }
+	                System.out.println("Student with the most courses taken: \n" + student.toString());
+	            }
+	            System.out.println("Would you like to perform an operation? If yes, type y. If no, type n");
+	            cont = scnr.next().charAt(0);
+	        }
+	        System.out.println("\nCourses:");
+	        for (int i = 0; i < numOfCourses; i++) {
+	            if (courses[i] != null) {
+	                System.out.println(courses[i].toString());
+	            }
+	        }
+	        System.out.println("\nFACULTIES:");
+	        for (int i = 0; i < numOfFaculty; i++) {
+	            System.out.println(faculty[i].toString());
+	        }
+	        System.out.println("\nGENERAL STAFF:");
+	        for (int i = 0; i < numOfGeneralStaff; i++) {
+	            System.out.println(generalStaff[i].toString());
+	        }
+	        System.out.println("\nSTUDENTS:");
+	        for (int i = 0; i < numOfStudents; i++) {
+	            System.out.println(students[i].toString());
+	        }
+
+	System.out.println("\nCourses:");
+			for (int i = 0; i < numOfCourses; i++) {
+				if (courses[i] != null) {
+					System.out.println(courses[i].toString());
+				}
+			}
+			System.out.println("\nFACULTIES:");
+			for (int i = 0; i < numOfFaculty; i++) {
+				System.out.println(faculty[i].toString());
+			}
+			System.out.println("\nGENERAL STAFF:");
+			for (int i = 0; i < numOfGeneralStaff; i++) {
+				System.out.println(generalStaff[i].toString());
+			}
+			System.out.println("\nSTUDENTS:");
+			for (int i = 0; i < numOfStudents; i++) {
+				System.out.println(students[i].toString());
+
+			}
+			
+			FileOutputStream fileStream = null;
+	        PrintWriter outFS = null;
+
+	        fileStream = new FileOutputStream("SchoolDB_Updated.txt");
+	        outFS = new PrintWriter(fileStream);
+
+	        outFS.println("FACULTY:");
+	        for (int i = 0; i < numOfFaculty; i++) {
+	            outFS.println(faculty[i].toString());
+	        }
+	        outFS.println();
+	        outFS.println("STUDENTS:");
+	        for (int i = 0; i < numOfStudents; i++) {
+	            outFS.println(students[i].toString());
+	        }
+	        outFS.println();
+	        outFS.println("GENERAL STAFF:");
+	        for (int i = 0; i < numOfGeneralStaff; i++) {
+	            outFS.println(generalStaff[i].toString());
+	        }
+	        outFS.println();
+	        outFS.println("COURSES:");
+	        for (int i = 0; i < numOfCourses; i++) {
+	            if (courses[i] != null)
+	            outFS.println(courses[i].toString());
+	        }
+	        outFS.flush();
+
+	        fileStream.close();
+
+		
+	}
+}
