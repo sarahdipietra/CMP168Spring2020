@@ -34,11 +34,10 @@ public class Person {
 		return height;
 	}
 	
-	@Override
-	public Person clone() throws CloneNotSupportedException {  
-		return (Person) super.clone();  
+	public Person clone() { 
+		Person copy = new Person(name, hasDriverLicense, age, height); 
+		return copy; 
 	} 
-	
 	
 	@Override
 	public boolean equals(Object object) {
