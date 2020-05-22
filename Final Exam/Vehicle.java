@@ -1,4 +1,4 @@
-package FinalExam;
+//package FinalExam;
 
 public abstract class Vehicle {
 	protected Person [][] personsOnBoard;
@@ -33,7 +33,7 @@ public abstract class Vehicle {
 	abstract int loadPassengers(Person [] peeps);
 
 	public void setDriver(Person p) throws InvalidDriverException{
-		if(p.hasDriverLicense() == true) {
+		if(p.hasDriverLicense()) {
 			p = personsOnBoard[0][0];
 		}
 		else {
@@ -46,7 +46,12 @@ public abstract class Vehicle {
 	}
 
 	public boolean hasDriver() {
-		return (personsOnBoard[0][0] != null);
+		if (personsOnBoard[0][0] instanceof Person ) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	public int getNumberOfAvailableSeats() {
@@ -74,7 +79,7 @@ public abstract class Vehicle {
 		return numberOfAvailableSeats;
 	}
 
-	public int getNumberOfPeopleOnBoards() {
+	public int getNumberOfPeopleOnBoard() {
 		int numberOfPeopleOnBoard = 0;
 		for (int i = 0; i < numberOfRows; i++) {
 			for (int j = 0; j < numSeatsPerRow[i]; j++) {
