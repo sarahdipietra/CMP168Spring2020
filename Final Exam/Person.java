@@ -1,4 +1,4 @@
-package FinalExam;
+//package FinalExam;
 
 public class Person {
 	private String name;
@@ -14,7 +14,7 @@ public class Person {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
 	public boolean hasDriverLicense() {
@@ -27,11 +27,11 @@ public class Person {
 	}
 	
 	public int getAge() {
-		return age;
+		return this.age;
 	}
 	
 	public int getHeight() {
-		return height;
+		return this.height;
 	}
 	
 	public Person clone() { 
@@ -57,6 +57,13 @@ public class Person {
 	
 	@Override
 	public String toString() {
-		return String.format("Person [name= %10s | age= %02d | height= %02d | has license/no license]", name, age, height, hasDriverLicense);
+		String license;
+		if(this.hasDriverLicense == true) {
+			license = "has license";
+		}
+		else {
+			license = "no license";
+		}
+		return String.format("Person [name= %10s | age= %02d | height= %02d | %10s]", name, age, height, license);
 	}
 }
